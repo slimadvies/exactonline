@@ -21,9 +21,9 @@ class LedgerAccounts(Manager):
             code_filter = []
             for code in code__in:
                 code = self._remote_code(code)
-                code_filter.append(u'Code eq %s' % (code,))
-            self._filter_append(kwargs, u'(%s)' % (u' or '.join(code_filter),))
+                code_filter.append('Code eq %s' % (code,))
+            self._filter_append(kwargs, '(%s)' % (' or '.join(code_filter),))
         return super(LedgerAccounts, self).filter(**kwargs)
 
     def _remote_code(self, code):
-        return u"'%s'" % (code.replace("'", "''"),)
+        return "'%s'" % (code.replace("'", "''"),)

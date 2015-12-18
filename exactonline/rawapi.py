@@ -124,7 +124,7 @@ class ExactRawApi(object):
         opt_custom = Options()
         opt_custom.headers = {
             'Accept': 'application/json',
-            'Authorization': 'Bearer ' + token,
+            'Authorization': 'Bearer ' + str(token),
         }
         if method in ('POST', 'PUT'):
             opt_custom.headers.update({'Content-Type': 'application/json'})

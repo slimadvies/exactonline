@@ -8,18 +8,19 @@ Copyright (C) 2015 Walter Doekes, OSSO B.V.
 
 We may want to replace this with something simpler.
 """
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import socket
 import ssl
 import sys
 
+from django.conf import settings
 from os import path
 from unittest import TestCase, main, skip, skipIf
 
 try:
-    from http.client import HTTPConnection, HTTPS_PORT
+    from .http.client import HTTPConnection, HTTPS_PORT
 except ImportError:  # python2
-    from httplib import HTTPConnection, HTTPS_PORT
+    from http.client import HTTPConnection, HTTPS_PORT
 try:
     from urllib import request
 except ImportError:  # python2
@@ -27,7 +28,7 @@ except ImportError:  # python2
 try:
     from urllib.parse import urljoin
 except ImportError:  # python2
-    from urlparse import urljoin
+    from urllib.parse import urljoin
 
 
 # ; helpers
@@ -38,7 +39,7 @@ def binquote(value):
     does not like it when we encode slashes -- in the redirect_uri -- as
     well (which the latter does).
     """
-    return urllib.quote(value.encode('utf-8'))
+    return urllib.parse.quote(value)
 
 urljoin  # touch it, we don't use it
 
@@ -81,7 +82,9 @@ class Options(object):
     # Do we validate the SSL certificate.
     verify_cert = False
     # What we use to validate the SSL certificate.
-    cacert_file = '/etc/ssl/certs/ca-certificates.crt'
+    cacert_file = getattr(settings, 'CACERT_FILE',
+                                    '/etc/ssl/certs/ca-certificates.crt')
+
     # Optional headers.
     headers = None
 
@@ -205,7 +208,7 @@ def http_post(url, data=None, opt=opt_default):
         # Allow binstrings for data.
         pass
     elif data:
-        data = urllib.urlencode(data)
+        data = urllib.parse.urlencode(data)
     else:
         data = ''.encode('utf-8')  # ensure POST-mode
     return _http_request(url, method='POST', data=data, opt=opt)
@@ -220,7 +223,7 @@ def http_put(url, data=None, opt=opt_default):
         # Allow binstrings for data.
         pass
     elif data:
-        data = urllib.urlencode(data)
+        data = urllib.parse.urlencode(data)
     else:
         data = ''.encode('utf-8')  # ensure POST-mode
     return _http_request(url, method='PUT', data=data, opt=opt)
@@ -441,7 +444,7 @@ class HttpTestCase(TestCase):
     # ; Python23 compatibility helpers
 
     try:
-        unicode  # python2
+        str  # python2
     except NameError:
         to_str = staticmethod(lambda x: x.decode('utf-8'))  # unistr
     else:

@@ -59,8 +59,8 @@ class Manager(object):
     def filter(self, **kwargs):
         # kwargs = {'filter': "EntryDate+gt+datetime'2014-01-01'", 'top': 5}
         args = []
-        for key, value in kwargs.items():
-            if isinstance(value, unicode):
+        for key, value in list(kwargs.items()):
+            if isinstance(value, str):
                 value = value.encode('utf-8')
             else:
                 value = str(value)
@@ -100,7 +100,7 @@ class Manager(object):
 
     def _filter_append(self, kwargs, extra_filter):
         if 'filter' in kwargs:
-            kwargs['filter'] = u'(%s) and %s' % (kwargs['filter'],
+            kwargs['filter'] = '(%s) and %s' % (kwargs['filter'],
                                                  extra_filter)
         else:
             kwargs['filter'] = extra_filter

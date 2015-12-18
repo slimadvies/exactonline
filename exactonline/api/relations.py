@@ -19,8 +19,8 @@ class Relations(Manager):
 
         if relation_code is not None:
             remote_id = self._remote_relation_code(relation_code)
-            self._filter_append(kwargs, u'Code eq %s' % (remote_id,))
+            self._filter_append(kwargs, 'Code eq %s' % (remote_id,))
         return super(Relations, self).filter(**kwargs)
 
     def _remote_relation_code(self, code):
-        return u"'%18s'" % (code.replace("'", "''"),)
+        return "'%18s'" % (code.replace("'", "''"),)

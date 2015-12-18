@@ -75,7 +75,7 @@ class ExactInvoice(ExactElement):
         total_amount_incl_vat = self.get_total_amount_incl_vat()
         total_vat = self.get_total_vat()
         created_date = self.get_created_date()
-        description = u'%s - %s, %s' % (invoice_number, customer.get_name(),
+        description = '%s - %s, %s' % (invoice_number, customer.get_name(),
                                         created_date.strftime('%m-%Y'))
 
         # Make sure the customer exists.
@@ -125,10 +125,10 @@ class ExactInvoice(ExactElement):
 
         # Cache ledger codes to ledger GUIDs.
         if ledger_lines:
-            assert isinstance(ledger_lines[0]['code'], basestring)
+            assert isinstance(ledger_lines[0]['code'], str)
             ledger_ids = self._api.ledgeraccounts.filter(
                 code__in=set([i['code'] for i in ledger_lines]))
-            ledger_ids = dict((unicode(i['Code']), i['ID'])
+            ledger_ids = dict((str(i['Code']), i['ID'])
                               for i in ledger_ids)
 
         for ledger_line in self.get_ledger_lines():

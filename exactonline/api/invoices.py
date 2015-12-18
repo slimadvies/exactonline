@@ -15,20 +15,20 @@ class Invoices(Manager):
     def get(self, **kwargs):
         invoice_dict = super(Invoices, self).get(**kwargs)
         try:
-            uri = invoice_dict[u'SalesEntryLines'][u'__deferred']['uri']
+            uri = invoice_dict['SalesEntryLines']['__deferred']['uri']
         except KeyError:
             # Perhaps there is a 'select' filter.
             pass
         else:
             invoicelines_dict = self._api.restv1('GET', str(uri))
-            invoice_dict[u'SalesEntryLines'] = invoicelines_dict
+            invoice_dict['SalesEntryLines'] = invoicelines_dict
         return invoice_dict
 
     def filter(self, invoice_number=None, reporting_period=None, **kwargs):
         if invoice_number is not None:
             remote_id = self._remote_invoice_number(invoice_number)
             # Filter by our invoice_number.
-            self._filter_append(kwargs, u'YourRef eq %s' % (remote_id,))
+            self._filter_append(kwargs, 'YourRef eq %s' % (remote_id,))
             # # Let the query return the invoice lines too. <-- DOES NOT WORK
             # assert 'expand' not in kwargs
             # kwargs['expand'] = 'SalesInvoiceLines'
@@ -39,9 +39,9 @@ class Invoices(Manager):
         if reporting_period is not None:
             # Filter by our invoice_number.
             self._filter_append(
-                kwargs, u'ReportingYear eq %d' % (reporting_period.year,))
+                kwargs, 'ReportingYear eq %d' % (reporting_period.year,))
             self._filter_append(
-                kwargs, u'ReportingPeriod eq %d' % (reporting_period.month,))
+                kwargs, 'ReportingPeriod eq %d' % (reporting_period.month,))
 
         return super(Invoices, self).filter(**kwargs)
 
@@ -117,4 +117,4 @@ class Invoices(Manager):
         return foreign_to_exact_map
 
     def _remote_invoice_number(self, invoice_number):
-        return u"'%s'" % (invoice_number.replace("'", "''"),)
+        return "'%s'" % (invoice_number.replace("'", "''"),)

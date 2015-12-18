@@ -22,7 +22,7 @@ class Unwrap(object):
             return decoded
 
         # GET/POST methods return a host of different types.
-        data = decoded.pop(u'd', None)
+        data = decoded.pop('d', None)
         if data is None or decoded:
             raise ValueError('Expected *only* "d" in response, got this: '
                              'response=%r, d=%r' % (decoded, data))
@@ -45,8 +45,8 @@ class Unwrap(object):
         return ret
 
     def _rest_with_next(self, result_data, method, resource, recursion):
-        results = result_data.pop(u'results', None)
-        next_ = result_data.pop(u'__next', None)
+        results = result_data.pop('results', None)
+        next_ = result_data.pop('__next', None)
         if results is None or result_data:
             raise ValueError('Expected *only* "results" in "d", got this: '
                              'd=%r, results=%r' % (result_data, results))

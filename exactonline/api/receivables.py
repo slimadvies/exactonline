@@ -21,20 +21,20 @@ class Receivables(Manager):
             # 'read/financial/ReceivablesListByAccount?accountId=X' over
             # this.
             relation_id = self._remote_guid(relation_id)
-            self._filter_append(kwargs, u'AccountId eq %s' % (relation_id,))
+            self._filter_append(kwargs, 'AccountId eq %s' % (relation_id,))
 
         if duedate__lt is not None:
             # Not sure what the AgeGroup means in
             # ReceivablesListByAgeGroup, but we can certainly do
             # without.
             duedate__lt = self._remote_datetime(duedate__lt)
-            self._filter_append(kwargs, u'DueDate lt %s' % (duedate__lt,))
+            self._filter_append(kwargs, 'DueDate lt %s' % (duedate__lt,))
 
         if duedate__gte is not None:
             # Not sure what the AgeGroup means in
             # ReceivablesListByAgeGroup, but we can certainly do
             # without.
             duedate__gte = self._remote_datetime(duedate__gte)
-            self._filter_append(kwargs, u'DueDate ge %s' % (duedate__gte,))
+            self._filter_append(kwargs, 'DueDate ge %s' % (duedate__gte,))
 
         return super(Receivables, self).filter(**kwargs)

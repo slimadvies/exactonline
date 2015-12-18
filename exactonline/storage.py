@@ -50,7 +50,7 @@ from os import path, unlink
 try:
     from configparser import NoSectionError, NoOptionError, ConfigParser
 except ImportError:  # python2
-    from ConfigParser import (
+    from configparser import (
         NoSectionError, NoOptionError,
         SafeConfigParser as ConfigParserOldStyle)
 
@@ -185,14 +185,14 @@ class IniStorage(ExactOnlineConfig, ConfigParser):
             self.read(filename_or_fp)
             self.overwrite = filename_or_fp
 
-    def get(self, section, option):
+    def get(self, section, option, **kwargs):
         """
         Get method that raises NoOptionError if the value was unset.
         This differs from the SafeConfigParser which may also raise a
         NoSectionError.
         """
         try:
-            ret = super(ExactOnlineConfig, self).get(section, option)
+            ret = super(ExactOnlineConfig, self).get(section, option, **kwargs)
         except NoSectionError:
             raise NoOptionError(option, section)
         return ret
